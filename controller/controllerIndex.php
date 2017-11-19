@@ -8,5 +8,6 @@ class controllerIndex
     public function actionIndex()
     {
         require_once(ROOT.'/view/Index.php');
+        return true;
     }
 }

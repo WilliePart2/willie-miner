@@ -33,6 +33,7 @@ class controllerAuthorization
             return true;
         }
         else {
+            $request = null;
             return false;
         }
 

@@ -20,6 +20,9 @@ class Router
             if(preg_match("~$uriPattern~", $uri)){
                     $action = preg_replace("~$uriPattern~", $action, $uri);
                     $section = explode("/", $action);
+//                    echo "<pre>";
+//                    var_dump($section);
+//                    echo "</pre>";
                     $controllerName = 'controller'.ucfirst(array_shift($section));
                     $actionName = "action".ucfirst(array_shift($section));
 

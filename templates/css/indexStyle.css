@@ -1,0 +1,117 @@
+/*==========================================
+    Стили шапки
+============================================*/
+.top-menu {
+    position: relative;
+    border-bottom: 1px solid #221e66;
+}
+.top-menu_label{
+    display: inline-block;
+    font-size: 24px;
+    line-height: 50px;
+    margin: 10px;
+}
+/*--- Стили кнопок шапки ---*/
+.sign-btn{
+    display: inline-block;
+    position: absolute;
+    top: 35px;
+    right: 10px;
+    transform: translateY(-50%);
+}
+.btn{
+    display: inline-block;
+    line-height: 30px;
+    font-size: 18px;
+    background-color: #fff;
+    border: 1px solid black;
+    border-radius: 12px;
+    margin: 5px;
+    transition-property: background-color;
+    transition-duration: .2s;
+    transition-timing-function: ease-in-out;
+}
+.btn_signin:hover{
+    background-color: #249d1f;
+    background-color: rgba(12, 172, 9, 0.65);
+}
+.btn_signout:hover{
+    background-color: #60608e;
+    background-color: rgba(31, 30, 133, 0.48);
+}
+.small{
+    font-size: 16px;
+}
+a {
+    text-decoration: none;
+}
+
+/*--- Стили логотипа ---*/
+.open_php{
+    color: blueviolet;
+}
+.close_php{
+    color: blueviolet;
+}
+.open_php::before{
+    content: '<';
+    display: inline-block;
+    color: #221e66;
+    font-weight: bold;
+}
+.open_php::after{
+    content: '"';
+    color: darkgreen;
+    display: inline-block;
+}
+.close_php::after{
+    content: '>';
+    display: inline-block;
+    color: #221e66;
+    font-weight: bold;
+}
+.close_php::before{
+    content: '"';
+    color: darkgreen;
+    display: inline-block;
+}
+/*===============================================
+    Стили блока с гланым контентом(main)
+================================================*/
+.main_form {
+    box-sizing: border-box;
+    float: left;
+    width: 35%;
+    border-right: 1px solid black;
+    min-height: 600px;
+}
+.main_miner {
+    box-sizing: border-box;
+    float: right;
+    width: 50%;
+    min-height: 600px;
+}
+.border{
+    clear: both;
+}
+/*=================================================
+    Стили полвала(footer)
+==================================================*/
+.footer{
+    border-top: 1px solid black;
+}
+.footer_item{
+    float: right;
+    width: 30%;
+    min-height: 50px;
+    margin: 1% 1.5% 1% 0;
+    border: 1px solid black;
+}
+.footer .footer_item:first-child{
+    margin-right:3.5%;
+}
+
+
+/*=================================================
+    Стили для дополнительных элементов
+==================================================*/

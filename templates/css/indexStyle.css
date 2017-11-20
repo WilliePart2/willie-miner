@@ -2,42 +2,60 @@
     Стили шапки
 ============================================*/
 .top-menu {
-    position: relative;
-    border-bottom: 1px solid #221e66;
+    /*border-bottom: 1px solid #221e66;*/
+    font-family: Open sans;
+    background-color: #159173;
+    overflow: hidden;
 }
 .top-menu_label{
-    display: inline-block;
+    display: block;
+    float: left;
+    box-sizing: border-box;
     font-size: 24px;
-    line-height: 50px;
-    margin: 10px;
+    line-height: 103px;
+    text-align: center;
+    color: #fff;
+    width: 35%;
+    background-color: #0a8367;
+}
+.top_willie{
+    font-weight: 300;
+}
+.top_miner{
+    font-weight: bold;
 }
 /*--- Стили кнопок шапки ---*/
 .sign-btn{
     display: inline-block;
-    position: absolute;
-    top: 35px;
-    right: 10px;
-    transform: translateY(-50%);
+    float: right;
+    box-sizing: border-box;
+    box-shadow: -1px 0 2px 0 #0a8367;
+    background-color: #0a8367;
+    /*position: absolute;*/
+    /*top: 35px;*/
+    /*right: 10px;*/
+    /*transform: translateY(-50%);*/
 }
 .btn{
-    display: inline-block;
-    line-height: 30px;
-    font-size: 18px;
-    background-color: #fff;
-    border: 1px solid black;
-    border-radius: 12px;
-    margin: 5px;
+    display: block;
+    float: right;
+    box-sizing: border-box;
+    line-height: 105px;
+    font-size: 30px;
+    color: #fff;
+    font-weight: 300;
+    background-color: #14896d;
+    border: none;
+    padding: 0 20px;
     transition-property: background-color;
     transition-duration: .2s;
     transition-timing-function: ease-in-out;
 }
 .btn_signin:hover{
-    background-color: #249d1f;
-    background-color: rgba(12, 172, 9, 0.65);
+    background-color: #1f201f;
 }
 .btn_signout:hover{
-    background-color: #60608e;
-    background-color: rgba(31, 30, 133, 0.48);
+    background-color: #1f201f;
 }
 .small{
     font-size: 16px;
@@ -79,11 +97,12 @@ a {
     Стили блока с гланым контентом(main)
 ================================================*/
 .main_form {
+    display:block;
     box-sizing: border-box;
     float: left;
     width: 35%;
-    border-right: 1px solid black;
     min-height: 600px;
+    background-color: #606360;
 }
 .main_miner {
     box-sizing: border-box;

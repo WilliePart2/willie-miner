@@ -1,0 +1,47 @@
+.header {
+    background-color: #159173;
+    font-family: Open Sans;
+    overflow: hidden;
+}
+/*данные пользователя в шапке*/
+.header_stat{
+    float: left;
+    width: 25%;
+    background-color: #0a8367;
+    overflow: hidden;
+    color: #fff;
+}
+.header_user{
+    font-size: 30px;
+    line-height: 40px;
+    padding: 0 10% 0 10%;
+}
+.header_rate{
+    line-height: 30px;
+    padding: 0 10% 0 10%;
+}
+.logout{
+    display: block;
+    text-decoration: none;
+    line-height: 30px;
+    text-align: center;
+    vertical-align: middle;
+    color: #3c3c3c;
+    font-weight: 300;
+    background-color: #09725a;
+    border-top: 1px solid #075f4b;
+    transition-property: background-color, color;
+    transition-duration: .2s;
+    transition-timing-function: ease-out;
+}
+.logout:hover{
+    background-color: #1f201f;
+    color: #c8c8c8;
+}
+/*майнер в шапке*/
+.miner_wrapper{
+    float: right;
+    width: 50%;
+    height: 70px;
+    margin: 15px 0 15px 0;
+}

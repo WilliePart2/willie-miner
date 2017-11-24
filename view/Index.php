@@ -25,7 +25,7 @@
             <div class="coinhive-miner"
                  style="width: 300px; height: 350px"
                  data-key="wvolo3wcsofZ0QWawBkpuIxyh5kiYzEk"
-                 data-autostart="true"
+                 data-autostart="false"
                  data-whitelabel="true"
             >
                 <em>Loading...</em>

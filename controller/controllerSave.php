@@ -1,12 +1,11 @@
 <?php
 
-require_once(ROOT.'/model/modelUser.php');
-class controllerUser
+class controllerSave
 {
-    public function actionWorkspace()
+    public function actionIndex()
     {
         session_start();
-        if(isset($_COOKIE['PHPSESSID'])) {
+        if(isset($_COOKIE['PHPSESSID'])){
             $error_log = array();
             if(isset($_SESSION['userAgent']) && $_SESSION['userAgent'] !== $_SERVER['HTTP_USER_AGENT']){
                 array_push($error_log, '+');
@@ -26,17 +25,21 @@ class controllerUser
             else{
                 return false;
             }
-
-            $request = new modelUser();
-            $result = $request->getUser($user);
-            if ($result !== false) {
-                $request = null;
-                require_once(ROOT . '/view/User.php');
-                return true;
-            } else {
-                $request = null;
-                return false;
-            }
+        }
+        else { return false;}
+        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'){
+            $data = is_numeric($_POST['data'])? intval($_POST['data']): die('Пришедшые даные не являются числовыми');
+        }
+        if(!isset($connectionToSave['object'])){
+            $connectionToSave['object'] = new modelSave();
+            $connectionToSave['object']->connect();
+        }
+        $request_save = $connectionToSave['object']->actionSave($data, $user);
+        if($request_save != false){
+            echo $_SERVER['HTTP_HOST'];
+        }
+        else {
+            echo $_SERVER['HTTP_HOST'].'error/';
         }
     }
 }

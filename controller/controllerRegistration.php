@@ -14,7 +14,7 @@ class controllerRegistration
             if(!preg_match('~[^\\s\\n]{2,50}@\\w{1,20}\\.\\w{1,10}~', trim($_POST['email']))){
                 $errors[] = "Поле email заполнено некоректно";
             }
-            if(!preg_match('~[^\\s\\n]{6,}~', $_POST['password'])){
+            if(!preg_match('~.{6,}~s', $_POST['password'])){
                 $errors[] = "Поле пароля заполнено некоректно";
             }
             if($_POST['password'] !== $_POST['repeat_password']){
@@ -32,14 +32,29 @@ class controllerRegistration
             // Если ошибок нету
             // Собираем данные с формы и регистрируем пользователя.
             else {
-                $login = $_POST['login'];
+                $login = strtolower(trim($_POST['login']));
                 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                $email = trim($_POST['email']);
 
                 $connect = new modelRegistration();
-                $result = $connect->actionNewUser($login, $password);
+                $result = $connect->actionNewUser($login, $password, $email);
                 if($result){
                     // Закрываем подключение к БД
                     $connect = null;
+                    session_start();
+                    $_SESSION['user'] = $login;
+                    if(isset($_SERVER['HTTP_USER_AGENT'])){
+                        $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
+                    }
+                    if(isset($_SERVER['REMOTE_ADDR'])){
+                        $_SESSION['remoteAddress'] = $_SERVER['REMOTE_ADDR'];
+                    }
+                    if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
+                        $_SESSION['forwarded'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+                    }
+                    if(isset($_SERVER['HTTP_X_REAL_IP'])){
+                        $_SESSION['ip'] = $_SERVER['HTTP_X_REAL_IP'];
+                    }
                     // Тут переадресовываем на страничку пользователя.
                     // Нужно указывать абсолютный путь вмете с протоколом.
                     header('Location: http://'.$_SERVER['HTTP_HOST'].'/user_'.$login.'/');

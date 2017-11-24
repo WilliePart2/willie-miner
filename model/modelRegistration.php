@@ -7,7 +7,7 @@ class modelRegistration
     {
         $this->db['connection'] = Db::dbConnection();
     }
-    public function actionNewUser($login, $password)
+    public function actionNewUser($login, $password, $email)
     {
         // Нужно заключить это все в блоки try - catch
 
@@ -22,19 +22,20 @@ class modelRegistration
             echo "Ошибка при проверке дублирования пользователей: ".$error->getMessage()."<br/>";
         }
         // Если такого пользователя нету в базе
-        if($this->db['check']->fetch() == 0){
+        if(empty($this->db['check']->fetch())){
             // Создаем пользователя в первичной таблице
             try {
-                $this->db['first_reg'] = $this->db['connection']->prepare('INSERT INTO users (login, password) VALUES (:login, :password);');
+                $this->db['first_reg'] = $this->db['connection']->prepare('INSERT INTO users (login, password, email) VALUES (:login, :password, :email);');
                 $this->db['first_reg']->bindValue(':login', $login, PDO::PARAM_STR);
                 $this->db['first_reg']->bindValue(':password', $password, PDO::PARAM_STR);
+                $this->db['first_reg']->bindValue(':email', $email, PDO::PARAM_STR);
                 $this->db['first_reg']->execute();
             }
             catch(PDOException $error){
                 echo "Ошибка при первичной проверке: ".$error->getMessage()."<br/>";
             }
 
-            // Создаем индифидуальную таблицу пользователя
+            // Создаем индивидуальную таблицу пользователя
             try {
                 $this->db['second_reg'] = $this->db['connection']->query('CREATE TABLE '.$login.' ('
                     . 'id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,'

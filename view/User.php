@@ -37,29 +37,43 @@
 </header>
 <main>
     <!--Пункт настройки и график со статистикой майнинга-->
-    <div class="miner_form_wrapper">
-        <div class="threads">
-            <h6>Количество потоков: </h6>
-            <div class="threads_monitor_wrapper">
-                <button class="js_threads_plus">+</button>
-                <div class="js_threads_monitor">1</div>
-                <button class="js_threads_minus">-</button>
+    <div class="header_sidebar">
+        <div class="miner_form_wrapper">
+            <div class="threads">
+                <h6>Количество потоков: </h6>
+                <div class="threads_monitor_wrapper">
+                    <button class="js_threads_plus">+</button>
+                    <div class="js_threads_monitor">1</div>
+                    <button class="js_threads_minus">-</button>
+                </div>
             </div>
-        </div>
-        <div class="throttle">
-            <h6>Скорость майнига: </h6>
-            <div class="throttle_monitor_wrapper">
-                <button class="js_throttle_minus">+</button>
-                <div class="js_throttle_monitor">10%</div>
-                <button class="js_throttle_plus">-</button>
+            <div class="throttle">
+                <h6>Скорость майнига: </h6>
+                <div class="throttle_monitor_wrapper">
+                    <button class="js_throttle_minus">+</button>
+                    <div class="js_throttle_monitor">10%</div>
+                    <button class="js_throttle_plus">-</button>
+                </div>
             </div>
+            <div class="autoThreads">
+                <h6>Автоматический подбор скорости</h6>
+                <input type="radio" name="autoThrottle" class="js_autoThreads" value="true">
+            </div>
+            <button class="js_start_mining">Начать</button>
+            <button class="js_stop_mining">Остановить</button>
         </div>
-        <div class="autoThreads">
-            <h6>Автоматический подбор скорости</h6>
-            <input type="radio" name="autoThrottle" class="js_autoThreads" value="true">
+    </div>
+    <div class="left_sidebar">
+        <!--Тут будет отображаться панель с навигацией то кабинету пользователя-->
+        <div calss="add_stream_btn">
+            <a href="streams/">Добавить канал</a>
         </div>
-        <button class="js_start_mining">Начать</button>
-        <button class="js_stop_mining">Остановить</button>
+        <div class="statistic_btn">
+            <a href="statistic/">Статистика</a>
+        </div>
+        <div class="acount_setting_btn">
+            <a href="setting/">Настройки акаута</a>
+        </div>
     </div>
     <canvas>
         <!-- В этом канвасе будет график майнинга -->

@@ -25,7 +25,8 @@ class modelRegistration
         if(empty($this->db['check']->fetch())){
             // Создаем пользователя в первичной таблице
             try {
-                $this->db['first_reg'] = $this->db['connection']->prepare('INSERT INTO users (login, password, email) VALUES (:login, :password, :email);');
+                $this->db['first_reg'] = $this->db['connection']->prepare('INSERT INTO users (login, password, email, registration_date)'
+                                                                                    .'VALUES (:login, :password, :email, NOW());');
                 $this->db['first_reg']->bindValue(':login', $login, PDO::PARAM_STR);
                 $this->db['first_reg']->bindValue(':password', $password, PDO::PARAM_STR);
                 $this->db['first_reg']->bindValue(':email', $email, PDO::PARAM_STR);
@@ -41,8 +42,8 @@ class modelRegistration
                     . 'id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,'
                     . 'date DATE NULL,'
                     . 'crypt_count INT(20) NOT NULL DEFAULT "0",'
-                    . 'referrals TEXT NULL,'
-                    . 'register_date DATE NULL'
+                    . 'master VARCHAR(25) NULL,'
+                    . 'persent_for_mater INT(3) NULL'
                     . ');');
 //                $this->db['second_reg']->bindValue(':login', $login, PDO::PARAM_STR);
 //                $this->db['result_second_reg'] = $this->db['second_reg']->execute();
@@ -54,8 +55,8 @@ class modelRegistration
             try{
                 // Зполнение таблицы пользователя.
                 $this->db['insert'] = $this->db['connection']->query('INSERT INTO '.$login
-                .'(date, crypt_count, register_date)'
-                    .'VALUES (NOW(), 0, NOW());');
+                .'(date, crypt_count)'
+                    .'VALUES (NOW(), 0);');
 //                $this->db['insert']->bindValue(':login', $login);
 //                $this->db['insert']->execute();
             }

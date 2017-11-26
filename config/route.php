@@ -1,5 +1,9 @@
 <?php
 return array(
+    "/user_(\\w+)/streams/addStream" => "stream/addStreamAjax",
+    "/user_(\\w+)/streams/" => "stream/index",
+    "/user_(\\w+)/deleteStream/" => "stream/deleteAjax",
+    "/user_(\\w+)/" => "statistic/index",
     "/ajax_signup/" => "registration/ajax",
     "/ajax_signin/" => "authorization/ajax",
     "/ajax_out/" => "logout/ajax", // Если вдруг перед выходм отключат JS постаить метод со ссылкой.

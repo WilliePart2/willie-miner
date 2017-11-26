@@ -62,10 +62,9 @@ class controllerRegistration
                     return true;
                 }
                 else {
-                    echo "выводим неудачную регистрацыю";
                     $connect = null;
                     // И тут выводим страницу ошибки.
-
+                    require_once(ROOT.'/view/Error.php');
                     // Уведомляем роутер что произошла ошибка
                     return false;
                 }

@@ -3,7 +3,10 @@ var miner_config_obj;
 const start = new CustomEvent('miner_started', {
     'bubbles': true
 });
-const USER = document.getElementById('username');
+var USER;
+window.addEventListener('load', function(){
+    USER = document.getElementById('username').innerHTML.trim(); // Я так делаю не часто... вродебы
+}, false);
 
 window.addEventListener('stop_mining', stopMiningHandler, false);
 window.addEventListener('start_mining', function(event){

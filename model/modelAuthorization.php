@@ -15,6 +15,14 @@ class modelAuthorization
                 // Проверяем соответствие пароля.
                 $password_match = password_verify($password, $user['password']);
                 if ($password_match) {
+                    $this->db['master'] = $this->db['connection']->prepare('SELECT master, ref_per FROM  users WHERE login = :login');
+                    $this->db['master']->bindValue(':login', $login, PDO::PARAM_STR);
+                    $this->db['master']->execute();
+                    $this->db['master']->setFetchMode(PDO::FETCH_ASSOC);
+                    $this->db['result'] = $this->db['master']->fetch();
+                    session_start();
+                    $_SESSION['ref'] = (!empty($this->db['result']['master']))? true : false;
+                    $_SESSION['ref_per'] = (!empty($this->db['result']['ref_per']))? $this->db['result']['ref_per'] : 0;
                     return true;
                 } else {
                     return false;
@@ -26,8 +34,7 @@ class modelAuthorization
             echo "Ошибка поиска пользователя в базе даных".$error->getMessage()."<br/>";
         }
 
-        // Если пользователь существует устанавливаем ему куки + создаем временный файл с его сесией.
-            // В этот временный файл можно будет забивать параметры.(login)
+
     }
     public function __destruct()
     {

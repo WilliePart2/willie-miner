@@ -15,16 +15,23 @@ class Router
     }
     public function run()
     {
+        /**
+         * Получение данных от клиента
+         * */
         $uri = $this->getURI();
-//        echo "$uri";
+        $query = (isset($_GET['ref']))? trim($_SERVER['QUERY_STRING']) : null;
+        if(!is_null($query)){
+            $position = strpos($uri, $query);
+            $query = substr($uri, $position);
+            $uri = substr($uri, 0, strlen($query)-2); // Индекс конца вырезания включается в результирующую строку.
+        }
+        /**
+         * Тело роутера
+         */
         foreach($this->routes as $uriPattern => $action){
             if(preg_match("~$uriPattern~", $uri)){
                     $action = preg_replace("~$uriPattern~", $action, $uri);
-//                    echo "$action";
                     $section = explode("/", $action);
-//                    echo "<pre>";
-//                    var_dump($section);
-//                    echo "</pre>";
                     $controllerName = 'controller'.ucfirst(array_shift($section));
                     $actionName = "action".ucfirst(array_shift($section));
 
@@ -36,6 +43,9 @@ class Router
                         if($result !== null){
                             break;
                         }
+                    }
+                    else{
+                        /** Если контроллера не найдено выдать страницу ошибки */
                     }
             }
         }

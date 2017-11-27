@@ -17,7 +17,6 @@ class controllerAuthorization
 
         if($result){
             $request = null;
-            session_start();
             $_SESSION['user'] = $login;
             if(isset($_SERVER['HTTP_USER_AGENT'])) {
                 $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];

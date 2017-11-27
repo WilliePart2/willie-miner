@@ -7,11 +7,15 @@ class modelRegistration
     {
         $this->db['connection'] = Db::dbConnection();
     }
-    public function actionNewUser($login, $password, $email)
+    public function actionNewUser($login, $password, $email, $master)
     {
-        $referrer = (isset($_SESSION['ref']) && $_SESSION['ref'] !== false)? $_SESSION['ref'] : null;
+        $referrer = (!is_null($master))? $master : null;
         $persent_fo_master = 5;
-        // Нужно заключить это все в блоки try - catch
+        /**
+         * Тут можно вставить блок кода с пользователями которые имеют повышеный реферальный процент.
+        */
+        session_start();
+        $_SESSION['ref_per'] = $persent_fo_master;
 
         // Проверяем есть ли такой пользователь.
         try {

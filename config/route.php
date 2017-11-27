@@ -8,6 +8,7 @@ return array(
     "/ajax_signin/" => "authorization/ajax",
     "/ajax_out/" => "logout/ajax", // Если вдруг перед выходм отключат JS постаить метод со ссылкой.
     "/user_([\\w]+)/ajax_logout/" => "logout/ajax",
+    "/user_([\\w]+)/ajax_justOut" => "logout/justOut",
     "/user_([\\w]+)/logout/" => "logout/index",
     "/user_(\\w+)/save/" => "save/index",
 

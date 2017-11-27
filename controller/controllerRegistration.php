@@ -8,7 +8,7 @@ class controllerRegistration
         // Реализую проверку данных введенных пользователем
         $errors = array();
         if(isset($_POST['signUp'])) { // Если нажата кнопка регистрации
-            if (!preg_match('~[^\\s\\n]{4,}~', trim($_POST['login']))) {
+            if (!preg_match('~[^\\s\\n]{3, 25}~', trim($_POST['login']))) {
                 $errors[] = 'Поле логина заполнено некоректно';
             }
             if(!preg_match('~[^\\s\\n]{2,50}@\\w{1,20}\\.\\w{1,10}~', trim($_POST['email']))){
@@ -36,17 +36,18 @@ class controllerRegistration
                 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $email = trim($_POST['email']);
 
+                $master = (isset($_GET['ref']))? htmlspecialchars(trim($_GET['ref'])) : null;
+
                 $connect = new modelRegistration();
-                $result = $connect->actionNewUser($login, $password, $email);
+                $result = $connect->actionNewUser($login, $password, $email, $master);
                 if($result){
                     // Закрываем подключение к БД
                     $connect = null;
                     // Информация о реферале получается по GET запросу
-                    if(isset($_GET['ref'])) $referrer = htmlspecialchars(trim($_GET['ref']));
 
-                    session_start();
                     $_SESSION['user'] = $login;
-                    $_SESSION['ref'] = (isset($referrer))? $referrer : false;
+                    $_SESSION['ref'] = (!is_null($master))? true : false;
+                    $_SESSION['ref_per'] = ($_SESSION['ref'])? 5 : 0;
                     if(isset($_SERVER['HTTP_USER_AGENT'])){
                         $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
                     }

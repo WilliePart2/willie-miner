@@ -1,11 +1,19 @@
 <?php
 
+/**
+ * Неиспользуемая модель.
+ * Возможно будет использоваться серверным демоном.
+*/
 class modelSave
 {
     private $db = array();
     public function connect()
     {
-        $this->db['connect'] = Db::dbConnection();
+        try {
+            $this->db['connect'] = Db::dbConnection();
+        } catch(PDOException $error){
+            echo "Ошибка соединения с БД: ".$error->getMessage();
+        }
     }
     public function actionSave($data, $ref_data, $user)
     {

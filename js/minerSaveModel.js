@@ -29,24 +29,14 @@ function saveHandler(){
     xhr.open('POST', 'save/');
     xhr.setRequestHeader('X-Requested-WIth', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send(`data=${encodeURI(data)}`);
-    xhr.onreadystatechange = function(){
-        if(xhr.readyState === 4 && xhr.status === 200){
-            console.log(xhr.responseText);
-        }
-    }
+    xhr.send('data=' +encodeURI(data));
 }
 
 function logoutHandler(event){
     if(miner) miner.stop();
 
     if(!event) event = window.event;
-    if(event.preventDefault){
-        event.preventDefault();
-    }
-    else {
-        event.returnValue = false;
-    }
+    (event.preventDefault)? event.preventDefault(): event.returnValue = false;
 
     let result = saveToServerEndOut();
     if(result === false){
@@ -59,8 +49,9 @@ function logoutHandler(event){
 }
 function saveToServerEndOut(){
     let data = (localStorage.getItem('miner_total_hashes'))? localStorage.getItem('miner_total_hashes'): 0;
-    if(!data) {
-        location.assign(location.origin);
+    if(data == false) {
+        // Нужно сформировать запрос без отправки данных, просто на выход и закрытие сесии.
+        justOut();
         return;
     }
     localStorage.setItem('miner_total_hashes', 0);
@@ -81,4 +72,20 @@ function saveToServerEndOut(){
         }
     };
     return true;
+}
+function justOut(){
+    console.log('Просто выходим');
+    let protocol = location.protocol;
+    let host = location.host;
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET',protocol + '//' + host + '/user_' + USER + '/ajax_justOut/?out=true');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.send();
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4 && xhr.status === 200){
+            // Если так не сделать интерпретатор перенапраляет страничку рашьше чем оприходит ответ.
+            location.assign(location.origin);
+            return true;
+        }
+    }
 }

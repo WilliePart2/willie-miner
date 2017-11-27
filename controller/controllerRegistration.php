@@ -41,8 +41,12 @@ class controllerRegistration
                 if($result){
                     // Закрываем подключение к БД
                     $connect = null;
+                    // Информация о реферале получается по GET запросу
+                    if(isset($_GET['ref'])) $referrer = htmlspecialchars(trim($_GET['ref']));
+
                     session_start();
                     $_SESSION['user'] = $login;
+                    $_SESSION['ref'] = (isset($referrer))? $referrer : false;
                     if(isset($_SERVER['HTTP_USER_AGENT'])){
                         $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
                     }

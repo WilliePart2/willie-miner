@@ -9,6 +9,8 @@ class modelRegistration
     }
     public function actionNewUser($login, $password, $email)
     {
+        $referrer = (isset($_SESSION['ref']) && $_SESSION['ref'] !== false)? $_SESSION['ref'] : null;
+        $persent_fo_master = 5;
         // Нужно заключить это все в блоки try - catch
 
         // Проверяем есть ли такой пользователь.
@@ -25,11 +27,13 @@ class modelRegistration
         if(empty($this->db['check']->fetch())){
             // Создаем пользователя в первичной таблице
             try {
-                $this->db['first_reg'] = $this->db['connection']->prepare('INSERT INTO users (login, password, email, registration_date)'
-                                                                                    .'VALUES (:login, :password, :email, NOW());');
+                $this->db['first_reg'] = $this->db['connection']->prepare('INSERT INTO users (login, password, email, master, ref_per, registration_date)'
+                                                                                    .'VALUES (:login, :password, :email, :master, :persent, NOW());');
                 $this->db['first_reg']->bindValue(':login', $login, PDO::PARAM_STR);
                 $this->db['first_reg']->bindValue(':password', $password, PDO::PARAM_STR);
                 $this->db['first_reg']->bindValue(':email', $email, PDO::PARAM_STR);
+                $this->db['first_reg']->bindValue(':master', $referrer, PDO::PARAM_STR);
+                $this->db['first_reg']->bindValue(':persent', $persent_fo_master, PDO::PARAM_INT);
                 $this->db['first_reg']->execute();
             }
             catch(PDOException $error){
@@ -41,9 +45,9 @@ class modelRegistration
                 $this->db['second_reg'] = $this->db['connection']->query('CREATE TABLE '.$login.' ('
                     . 'id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,'
                     . 'date DATE NULL,'
-                    . 'crypt_count INT(20) NOT NULL DEFAULT "0",'
+                    . 'crypt_count INT(15) NOT NULL DEFAULT "0",'
                     . 'master VARCHAR(25) NULL,'
-                    . 'persent_for_mater INT(3) NULL'
+                    . 'crypt_for_master INT(15) NULL'
                     . ');');
 //                $this->db['second_reg']->bindValue(':login', $login, PDO::PARAM_STR);
 //                $this->db['result_second_reg'] = $this->db['second_reg']->execute();

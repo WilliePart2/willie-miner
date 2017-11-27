@@ -29,17 +29,12 @@ class controllerSave
         else { return false;}
         if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'){
             $data = is_numeric($_POST['data'])? intval($_POST['data']): die('Пришедшые даные не являются числовыми');
+            $ref_data = (isset($_SESSION['ref']))? $data*(($_SESSION['ref_per'])/100) : 0;
+            $data = $data - $ref_data;
+
+            $_SESSION['crypt_fo_master'] += $ref_data;
+            $_SESSION['crypt_count'] += $data;
         }
-        if(!isset($connectionToSave['object'])){
-            $connectionToSave['object'] = new modelSave();
-            $connectionToSave['object']->connect();
-        }
-        $request_save = $connectionToSave['object']->actionSave($data, $user);
-        if($request_save != false){
-            echo $_SERVER['HTTP_HOST'];
-        }
-        else {
-            echo $_SERVER['HTTP_HOST'].'error/';
-        }
+        else return false;
     }
 }

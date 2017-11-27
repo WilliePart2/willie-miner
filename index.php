@@ -7,8 +7,7 @@ error_reporting(E_ALL);
 define('ROOT',dirname(__FILE__));
 require_once(ROOT.'/components/Router.php');
 require_once(ROOT.'/components/Db.php');
-require_once(ROOT.'/model/modelSave.php');
-$connectionToSave = array();
+$connectionToSave = array(); // Эту штюку оставим серверному демону.
 
 // Подключения к базе данных
 

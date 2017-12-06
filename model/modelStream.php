@@ -22,10 +22,6 @@ class modelStream
             $this->db['query']->execute();
             $this->db['query']->setFetchMode(PDO::FETCH_ASSOC);
             $result[] = $this->db['query']->fetch();
-
-            /*echo"<pre>";
-            var_dump($result);
-            echo "</pre>";*/
         }
         catch(PDOException $error){
             echo 'Ошибка при получении количества потоков пользователя: '.$error->getMessage();
@@ -40,9 +36,6 @@ class modelStream
                 foreach($this->db['list_streams'] as $line => $value){
                     $result[] = $value;
                 }
-                /*echo "<pre>";
-                var_dump($result);
-                echo "</pre>";*/
             }
             catch(PDOException $error){
                 echo "Ошибка при извелении пользовательских потоков: ".$error->getMessage();

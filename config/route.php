@@ -19,6 +19,22 @@ return array(
     "/signup/" => "registration/form",
     "/signin/" => "authorization/form",
 
+    // Пути для реакта
+    "/workspace/ajax_logout/?" => "logout/ajax",
+    "/workspace/payment/?" => "payment/index",
+    "/workspace/statistic/?" => "statistic/index",
+    "/workspace/streams/?" => "stream/index",
+    "/workspace/self/?" => "user/workspace",
+    "/save/?" => "save/index",
+    "/workspace/?" => "user/workspace",
+    "/register/?" => "registration/newUser",
+    "/login/?" => "authorization/user",
+    "/addStream/?" => "stream/addStreamAjax",
+    "/deleteStream/?" => "stream/deleteAjax",
+    "/getFile/?" => "stream/download",
+    "/ajax_justOut/" => "logout/justOut",
+    "/ajax_logout/" => "logout/ajax",
+
 
 
     // Запись для вызова только контроллера

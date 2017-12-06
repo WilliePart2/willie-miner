@@ -1,40 +1,33 @@
 <?php
 
-class controllerSave
+require_once(ROOT.'/core/controller_base.php');
+require_once(ROOT.'/components/User.php');
+require_once(ROOT.'/model/modelLogout.php');
+class controllerSave extends controller_base
 {
     public function actionIndex()
     {
-        session_start();
-        if(isset($_COOKIE['PHPSESSID'])){
-            $error_log = array();
-            if(isset($_SESSION['userAgent']) && $_SESSION['userAgent'] !== $_SERVER['HTTP_USER_AGENT']){
-                array_push($error_log, '+');
-            }
-            if(isset($_SESSION['remoteAddress']) && $_SESSION['remoteAddress'] !== $_SERVER['REMOTE_ADDR']){
-                array_push($error_log, '+');
-            }
-            if(isset($_SESSION['forwarded']) && $_SESSION['forwarded'] !== $_SERVER['HTTP_X_FORWARDED_FOR']){
-                array_push($error_log, '+');
-            }
-            if(isset($_SESSION['ip']) && $_SESSION['ip'] !== $_SERVER['HTTP_X_REAL_IP']){
-                array_push($error_log, "+");
-            }
-            if(empty($error_log)){
+        if ($this->isAjax()) {
+            $user_obj = new User();
+            if ($user_obj->checkSession()) {
                 $user = $_SESSION['user'];
-            }
-            else{
-                return false;
-            }
-        }
-        else { return false;}
-        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'){
-            $data = is_numeric($_POST['data'])? intval($_POST['data']): die('Пришедшые даные не являются числовыми');
-            $ref_data = (isset($_SESSION['ref']))? $data*(($_SESSION['ref_per'])/100) : 0;
-            $data = $data - $ref_data;
+                $data = isset($_POST['data']) ? $_POST['data'] : 0;
+                $ref_data = (isset($_SESSION['ref'])) ? $data * (($_SESSION['ref_per']) / 100) : 0;
+                $data = $data - $ref_data;
 
-            $_SESSION['crypt_fo_master'] += $ref_data;
-            $_SESSION['crypt_count'] += $data;
+                $_SESSION['crypt_fo_master'] += $ref_data - (!empty($_SESSION['crypt_fo_master']) && isset($_SESSION['crypt_fo_master'])? $_SESSION['crypt_fo_master'] : 0);
+                $_SESSION['crypt_count'] += $data - (!empty($_SESSION['crypt_count'] && isset($_SESSION['crypt_count']))? $_SESSION['crypt_count'] : 0);
+                echo"Принято сохранениe";
+                echo "Всего хэшэй: ".$_SESSION['crypt_count'];
+                $_SESSION['time_to_save'] = time();
+                sleep(30);
+                if((time() - $_SESSION['time_to_save']) > 20 ) $this->save_to_db($_SESSION['crypt_count'], $_SESSION['crypt_fo_master'], $user);
+            }
         }
-        else return false;
+    }
+    private function save_to_db($data, $ref_data, $user)
+    {
+        $request_obj = new ModelLogout();
+        $request_obj->actionSave($data, $ref_data, $user);
     }
 }

@@ -72,7 +72,7 @@
             <a href="statistic/">Статистика</a>
         </div>
         <div class="acount_setting_btn">
-            <a href="setting/">Настройки акаута</a>
+            <a href="setting/">Выплаты</a>
         </div>
     </div>
     <canvas>

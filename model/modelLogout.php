@@ -36,7 +36,7 @@ class modelLogout
         } else {
             /** Запрос если данные уже были сегодня внесены */
             try {
-                $this->db['insert'] = $this->db['connect']->prepare("UPDATE $user SET crypt_count = :crypt, crypt_for_master = :crypt_fo_master"
+                $this->db['insert'] = $this->db['connect']->prepare("UPDATE $user SET crypt_count = :crypt, crypt_for_master = :crypt_for_master"
                     . " WHERE date = CURDATE();");
                 $this->db['insert']->bindValue(':crypt', $data, PDO::PARAM_INT);
                 $this->db['insert']->bindValue(':crypt_for_master', $ref_data, PDO::PARAM_INT);

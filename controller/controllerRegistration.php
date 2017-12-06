@@ -1,88 +1,72 @@
 <?php
 
-require_once(ROOT.'/model/modelRegistration.php');
-class controllerRegistration
+require_once(ROOT . '/model/modelRegistration.php');
+require_once(ROOT . '/core/controller_base.php');
+require_once(ROOT . '/components/User.php');
+
+class controllerRegistration extends controller_base
 {
     public function actionNewUser()
     {
-        // Реализую проверку данных введенных пользователем
-        $errors = array();
-        if(isset($_POST['signUp'])) { // Если нажата кнопка регистрации
-            if (!preg_match('~[^\\s\\n]{3, 25}~', trim($_POST['login']))) {
+        if ($this->isAjax()) {
+            $data = $this->getAjaxData();
+//            echo "<pre>";
+//            var_dump($data);
+//            echo "</pre>";
+            // Реализую проверку данных введенных пользователем
+            $errors = array();
+            if (!preg_match('~[^\\s\\n]{3,25}~isx', $data['login'])) {
                 $errors[] = 'Поле логина заполнено некоректно';
             }
-            if(!preg_match('~[^\\s\\n]{2,50}@\\w{1,20}\\.\\w{1,10}~', trim($_POST['email']))){
+            if (!preg_match('~[^\\s\\n]{2,50}@\\w{1,20}\\.\\w{1,10}~', trim($data['email']))) {
                 $errors[] = "Поле email заполнено некоректно";
             }
-            if(!preg_match('~.{6,}~s', $_POST['password'])){
+            if (!preg_match('~.{6,}~s', $data['password'])) {
                 $errors[] = "Поле пароля заполнено некоректно";
             }
-            if($_POST['password'] !== $_POST['repeat_password']){
+            if ($data['password'] !== $data['password_repeat']) {
                 $errors[] = "Пароли не совпадают";
             }
             // Вывод ошибок
-            if(!empty($errors)){
-                echo "<div class='errors'>";
-                foreach($errors as $value){
-                    echo $value."<br/>";
-                }
-                echo "</div>";
+            if (!empty($errors)) {
+                echo json_encode($errors);
                 return false; // Уведомляем роутер что произошла ошибка.
             }
             // Если ошибок нету
             // Собираем данные с формы и регистрируем пользователя.
             else {
-                $login = strtolower(trim($_POST['login']));
-                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                $email = trim($_POST['email']);
+                $login = strtolower(trim($data['login']));
+                $password = password_hash($data['password'], PASSWORD_DEFAULT);
+                $email = trim($data['email']);
 
-                $master = (isset($_GET['ref']))? htmlspecialchars(trim($_GET['ref'])) : null;
+                // Доработаю реферальную систему
+                $master = (isset($data['ref'])) ? htmlspecialchars(trim($data['ref'])) : null;
 
                 $connect = new modelRegistration();
                 $result = $connect->actionNewUser($login, $password, $email, $master);
-                if($result){
+                if ($result) {
                     // Закрываем подключение к БД
                     $connect = null;
-                    // Информация о реферале получается по GET запросу
 
+                    $user_obj = new User();
+                    $user_obj->setSession();
                     $_SESSION['user'] = $login;
-                    $_SESSION['ref'] = (!is_null($master))? true : false;
-                    $_SESSION['ref_per'] = ($_SESSION['ref'])? 5 : 0;
-                    if(isset($_SERVER['HTTP_USER_AGENT'])){
-                        $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
-                    }
-                    if(isset($_SERVER['REMOTE_ADDR'])){
-                        $_SESSION['remoteAddress'] = $_SERVER['REMOTE_ADDR'];
-                    }
-                    if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
-                        $_SESSION['forwarded'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
-                    }
-                    if(isset($_SERVER['HTTP_X_REAL_IP'])){
-                        $_SESSION['ip'] = $_SERVER['HTTP_X_REAL_IP'];
-                    }
-                    // Тут переадресовываем на страничку пользователя.
-                    // Нужно указывать абсолютный путь вмете с протоколом.
-                    header('Location: http://'.$_SERVER['HTTP_HOST'].'/user_'.$login.'/');
-                    // Уведомляем роутер что регистрация прошла успешно.
+                    $_SESSION['ref'] = (!is_null($master)) ? true : false;
+                    $_SESSION['ref_per'] = ($_SESSION['ref']) ? 5 : 0;
+
+                    echo "true";
                     return true;
-                }
-                else {
+                } else {
                     $connect = null;
                     // И тут выводим страницу ошибки.
-                    require_once(ROOT.'/view/Error.php');
+                    echo "false";
                     // Уведомляем роутер что произошла ошибка
                     return false;
                 }
             }
+        } else {
+            $this->layout();
+            return true;
         }
-        else {
-            // Ошибка кнопка не нажата.
-            return false;
-        }
-    }
-    public function actionForm()
-    {
-        require_once(ROOT.'/view/Registration.php');
-        return true;
     }
 }

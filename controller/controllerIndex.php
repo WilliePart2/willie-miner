@@ -1,13 +1,13 @@
 <?php
-
-class controllerIndex
+require_once(ROOT.'/core/controller_base.php');
+class controllerIndex extends controller_base
 {
     /**
      * Все что делает это метод это выводит главную страницу
     */
     public function actionIndex()
     {
-        require_once(ROOT.'/view/Index.php');
+        $this->layout();
         return true;
     }
 }

@@ -1,7 +1,9 @@
 <?php
 
 require_once(ROOT.'/model/modelAuthorization.php');
-class controllerAuthorization
+require_once(ROOT.'/core/controller_base.php');
+require_once(ROOT.'/components/User.php');
+class controllerAuthorization extends controller_base
 {
     /**
      * Авторизируем пользователя.
@@ -9,36 +11,31 @@ class controllerAuthorization
     */
     public function actionUser()
     {
-        $login = strtolower(trim($_POST['login']));
-        $password = $_POST['password'];
+        if($this->isAjax()){
+            $data = $this->getAjaxData();
+            $login = strtolower(trim($data['login']));
+            $password = $data['password'];
 
-        $request = new modelAuthorization();
-        $result = $request->userAuthorization($login, $password);
-
-        if($result){
-            $request = null;
-            $_SESSION['user'] = $login;
-            if(isset($_SERVER['HTTP_USER_AGENT'])) {
-                $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
+            $request = new modelAuthorization();
+            $result = $request->userAuthorization($login, $password);
+            if($result != false){
+                $user = new User();
+                $request = null;
+                $user->setSession();
+                $_SESSION['user'] = $login;
+                echo "true";
+                return true;
             }
-            if(isset($_SERVER['REMOTE_ADDR'])) {
-                $_SESSION['remoteAddress'] = $_SERVER['REMOTE_ADDR'];
+            else {
+                $request = null;
+                echo "false";
+                return false;
             }
-            if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $_SESSION['forwarded'] = $_SERVER['HTTP_X_FORWARDER_FOR'];
-            }
-            if(isset($_SERVER['HTTP_X_REAL_IP'])) {
-                $_SESSION['ip'] = $_SERVER['HTTP_X_REAL_IP'];
-            }
-
-            header('Location: http://'.$_SERVER['HTTP_HOST'].'/user_'.$login.'/');
+        }
+        else{
+            $this->layout();
             return true;
         }
-        else {
-            $request = null;
-            return false;
-        }
-
     }
     /**
      * Этот метод просто выводит форму авторизации и все.
@@ -48,9 +45,9 @@ class controllerAuthorization
         /**
          * Доработать сесию и добавить поддержку сесии в файл User.php(view)
         */
-        session_start();
         $error_log = array();
         if(isset($_COOKIE['PHPSESSID'])){
+            session_start();
             if(isset($_SESSION['remoteAddress']) && $_SERVER['REMOTE_ADDR'] !== $_SESSION['remoteAddress']){
                 array_push($error_log, '+');
             }
